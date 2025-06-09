@@ -4,7 +4,11 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "heroku-postbuild": "npm run build"
+    },
+    "engines": {
+        "node": "20.x"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
