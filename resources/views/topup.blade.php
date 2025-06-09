@@ -40,8 +40,8 @@
                     <td class="px-2 py-1 border">{{ ucfirst($topup->status) }}</td>
                     <td class="px-2 py-1 border">
                         @if($topup->image_url)
-                            <a href="{{ asset('storage/' . $topup->image_url) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $topup->image_url) }}" alt="Proof" style="max-width:40px;max-height:40px;">
+                            <a href="{{ Storage::url($topup->image_url) }}" target="_blank">
+                                <img src="{{ Storage::url($topup->image_url) }}" alt="Proof" style="max-width:40px;max-height:40px;">
                             </a>
                         @else
                             <span class="text-muted">No image</span>

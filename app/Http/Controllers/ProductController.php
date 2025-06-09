@@ -38,8 +38,8 @@ class ProductController extends Controller
         ]);
         $data = $request->only('name', 'price', 'stock');
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image_url'] = '/storage/' . $path;
+            $path = $request->file('image')->store('products'); // uses default disk (S3)
+            $data['image_url'] = $path;
         }
         $shop->products()->create($data);
         return redirect()->route('shops.show', $shop);
@@ -74,8 +74,8 @@ class ProductController extends Controller
         $data = $request->only('name', 'price', 'stock');
         if ($request->hasFile('image')) {
             // Optionally delete old image file here if needed
-            $path = $request->file('image')->store('products', 'public');
-            $data['image_url'] = '/storage/' . $path;
+            $path = $request->file('image')->store('products'); // uses default disk (S3)
+            $product->image_url = $path;
         }
         $product->update($data);
         return redirect()->route('products.show', $product);

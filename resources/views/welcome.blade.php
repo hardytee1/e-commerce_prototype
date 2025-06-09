@@ -32,7 +32,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse($products as $product)
                 <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
-                    <img src="{{ $product->image_url ?? 'https://via.placeholder.com/300x300?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-48 object-cover rounded mb-4">
+                    <img src="{{ $product->image_url ? Storage::url($product->image_url) : 'https://via.placeholder.com/300x300?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-48 object-cover rounded mb-4">
                     <h2 class="text-lg font-semibold mb-2">{{ $product->name }}</h2>
                     <p class="text-gray-700 mb-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                     @auth

@@ -26,8 +26,8 @@
                     <td>Rp {{ number_format($topup->amount, 0, ',', '.') }}</td>
                     <td>
                         @if($topup->image_url)
-                            <a href="{{ asset('storage/' . $topup->image_url) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $topup->image_url) }}" alt="Proof" style="max-width:80px;max-height:80px;">
+                            <a href="{{ Storage::url($topup->image_url) }}" target="_blank">
+                                <img src="{{ Storage::url($topup->image_url) }}" alt="Proof" style="max-width:80px;max-height:80px;">
                             </a>
                         @else
                             <span class="text-muted">No image</span>

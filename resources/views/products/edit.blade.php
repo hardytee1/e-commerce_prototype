@@ -22,7 +22,7 @@
             <input type="file" name="image" class="form-control" accept="image/jpeg,image/png">
             @if($product->image_url)
                 <div class="mt-2">
-                    <img src="{{ $product->image_url }}" alt="Current Image" style="max-width: 150px; max-height: 150px;">
+                    <img src="{{ Storage::url($product->image_url) }}" alt="Current Image" style="max-width: 150px; max-height: 150px;">
                     <p class="text-muted">Current Image</p>
                 </div>
             @endif

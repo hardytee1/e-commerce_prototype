@@ -9,6 +9,7 @@
                 <th>Shop</th>
                 <th>Price</th>
                 <th>Stock</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -19,6 +20,7 @@
                 <td>{{ $product->shop->name }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->stock }}</td>
+                <td><img src="{{ $product->image_url ? Storage::url($product->image_url) : 'https://via.placeholder.com/100x100?text=No+Image' }}" alt="{{ $product->name }}" style="max-width:60px;max-height:60px;"></td>
                 <td>
                     @auth
                         @if(!auth()->user()->shop)

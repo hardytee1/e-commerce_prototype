@@ -15,7 +15,7 @@
                 @forelse($shop->products as $product)
                     <div class="col-md-3 mb-4">
                         <div class="card h-100">
-                            <img src="{{ $product->image_url ?? 'https://via.placeholder.com/300x300?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}">
+                            <img src="{{ $product->image_url ? Storage::url($product->image_url) : 'https://via.placeholder.com/300x300?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $product->name }}</h5>
                                 <p class="card-text">Rp {{ number_format($product->price, 0, ',', '.') }}</p>

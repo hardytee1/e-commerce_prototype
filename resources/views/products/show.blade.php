@@ -2,6 +2,7 @@
 @section('content')
 <div class="container">
     <h1>{{ $product->name }}</h1>
+    <img src="{{ $product->image_url ? Storage::url($product->image_url) : 'https://via.placeholder.com/300x300?text=No+Image' }}" alt="{{ $product->name }}" style="max-width:200px;max-height:200px;">
     <p>Price: {{ $product->price }}</p>
     <p>Stock: {{ $product->stock }}</p>
     @auth
