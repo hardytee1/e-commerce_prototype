@@ -34,7 +34,7 @@ class TransactionController extends Controller
 
         $user = $request->user();
         $amount = $request->input('amount');
-        $imagePath = $request->file('image')->store('topup_proofs', 'public');
+        $imagePath = $request->file('image')->store('topup_proofs');
 
         // Create transaction record as pending
         Transaction::create([

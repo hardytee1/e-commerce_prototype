@@ -15,6 +15,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    if (auth()->check() && auth()->user()->id === 1) {
+        return redirect('/admin/dashboard');
+    }
     $products = \App\Models\Product::with('shop')->latest()->get();
     return view('dashboard', compact('products'));
 })->middleware(['auth', 'verified'])->name('dashboard');
