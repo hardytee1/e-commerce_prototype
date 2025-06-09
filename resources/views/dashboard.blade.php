@@ -35,7 +35,7 @@
                 <div class="bg-white rounded-lg shadow p-6 mb-8">
                     <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('products.create') }}" class="inline-block px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition">Add New Product</a>
+                        <a href="{{ route('shops.products.create', auth()->user()->shop) }}" class="inline-block px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition">Add New Product</a>
                         <a href="{{ route('orders.index') }}" class="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">View Orders</a>
                         <a href="{{ route('shops.show', auth()->user()->shop) }}" class="inline-block px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">Manage Shop</a>
                     </div>
@@ -60,11 +60,16 @@
                     <h2 class="text-2xl font-bold mb-8 text-gray-900">All Products</h2>
                     <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                       @forelse($products as $product)
-                        <a href="{{ route('products.show', $product) }}" class="group block">
+                        <div class="group block">
                           <img src="{{ $product->image_url ?? 'https://via.placeholder.com/300x300?text=No+Image' }}" alt="{{ $product->name }}" class="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-7/8">
                           <h3 class="mt-4 text-sm text-gray-700">{{ $product->name }}</h3>
                           <p class="mt-1 text-lg font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                        </a>
+                          <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-2 flex items-center gap-2">
+                            @csrf
+                            <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm w-20" style="width:60px;">
+                            <button type="submit" class="btn btn-sm btn-success">Add to Cart</button>
+                          </form>
+                        </div>
                       @empty
                         <div class="col-span-full text-center text-gray-500">No products available.</div>
                       @endforelse

@@ -34,8 +34,14 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $shop->products()->create($request->only('name', 'price', 'stock'));
+        $data = $request->only('name', 'price', 'stock');
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+        $shop->products()->create($data);
         return redirect()->route('shops.show', $shop);
     }
 
@@ -63,8 +69,15 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $product->update($request->only('name', 'price', 'stock'));
+        $data = $request->only('name', 'price', 'stock');
+        if ($request->hasFile('image')) {
+            // Optionally delete old image file here if needed
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+        $product->update($data);
         return redirect()->route('products.show', $product);
     }
 

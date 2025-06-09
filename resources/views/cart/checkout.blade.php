@@ -5,6 +5,7 @@
     <h2>Checkout</h2>
     @if(isset($success) && $success)
         <div class="alert alert-success">Checkout berhasil! Total dibayar: Rp{{ number_format($total,0,',','.') }}</div>
+        <div class="mb-3"><strong>Alamat Pengiriman:</strong> {{ $address ?? '-' }}</div>
         <a href="{{ route('orders.index') }}" class="btn btn-primary">Lihat Pesanan</a>
     @else
         <div class="alert alert-danger">Checkout gagal. Silakan coba lagi.</div>

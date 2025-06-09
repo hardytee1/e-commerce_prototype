@@ -48,6 +48,10 @@
     <div class="text-end">
         <form action="{{ route('cart.checkout') }}" method="POST" class="d-inline">
             @csrf
+            <div class="mb-3">
+                <label for="address" class="form-label">Alamat Pengiriman</label>
+                <input type="text" name="address" id="address" class="form-control" required placeholder="Masukkan alamat lengkap">
+            </div>
             <button type="submit" class="btn btn-success">Checkout</button>
         </form>
     </div>

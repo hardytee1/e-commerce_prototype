@@ -3,8 +3,15 @@
 <div class="container">
     <h1>Order #{{ $order->id }}</h1>
     <p>Customer: {{ $order->customer->name }}</p>
+    <p>Address: {{ $order->address ?? '-' }}</p>
     <p>Total: {{ $order->total_amount }}</p>
     <p>Status: {{ $order->status }}</p>
+    @if(auth()->user()->shop && $order->status === 'pending')
+        <form action="{{ route('orders.inshipping', $order) }}" method="POST" class="mb-3">
+            @csrf
+            <button type="submit" class="btn btn-warning">Mark as In Shipping</button>
+        </form>
+    @endif
     @if(auth()->user()->shop && $order->status !== 'completed')
         <form action="{{ route('orders.complete', $order) }}" method="POST" class="mb-3">
             @csrf

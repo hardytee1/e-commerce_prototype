@@ -76,21 +76,58 @@ class OrderController extends Controller
         }
         // Calculate total for this shop
         $shopTotal = $order->orderItems()->where('shop_id', $shopId)->sum(\DB::raw('quantity * price_per_unit'));
-        // Credit shop wallet
-        $shop->wallet_balance += $shopTotal;
+        // Calculate platform fee (5%) and vendor payout (95%)
+        $platformFee = round($shopTotal * 0.05, 2);
+        $vendorPayout = $shopTotal - $platformFee;
+        // Credit shop wallet with 95%
+        $shop->wallet_balance += $vendorPayout;
         $shop->save();
-        // Create transaction for shop
+        // Create transaction for shop (95%)
         \App\Models\Transaction::create([
             'user_id' => $shop->user_id,
             'shop_id' => $shop->id,
             'order_id' => $order->id,
             'type' => 'sale_credit',
-            'amount' => $shopTotal,
-            'description' => 'Penjualan order #' . $order->id,
+            'amount' => $vendorPayout,
+            'description' => 'Penjualan order #' . $order->id . ' (95%)',
         ]);
+        // Credit admin wallet with 5%
+        $admin = \App\Models\User::find(1);
+        if ($admin) {
+            $admin->wallet_balance += $platformFee;
+            $admin->save();
+            \App\Models\Transaction::create([
+                'user_id' => $admin->id,
+                'order_id' => $order->id,
+                'type' => 'sale_credit', // use allowed type
+                'amount' => $platformFee,
+                'description' => 'Platform fee from order #' . $order->id . ' (5%)',
+            ]);
+        }
         // Mark as completed
         $order->status = 'completed';
         $order->save();
         return back()->with('success', 'Order marked as completed and wallet updated.');
+    }
+
+    public function markInShipping(Order $order)
+    {
+        $user = Auth::user();
+        if (!$user->shop) {
+            abort(403, 'Only sellers can update shipping status.');
+        }
+        $shop = $user->shop;
+        $shopId = $shop->id;
+        // Only allow if the order contains items from this seller's shop and is not already in shipping or completed
+        $hasItems = $order->orderItems()->where('shop_id', $shopId)->exists();
+        if (!$hasItems) {
+            abort(403, 'Order does not belong to your shop.');
+        }
+        if ($order->status === 'inshipping' || $order->status === 'completed') {
+            return back()->with('success', 'Order already in shipping or completed.');
+        }
+        $order->status = 'inshipping';
+        $order->save();
+        return back()->with('success', 'Order marked as in shipping.');
     }
 }

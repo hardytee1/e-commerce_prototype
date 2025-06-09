@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <h1>Add Product to {{ $shop->name }}</h1>
-    <form method="POST" action="{{ route('shops.products.store', $shop) }}">
+    <form method="POST" action="{{ route('shops.products.store', $shop) }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Product Name</label>
@@ -15,6 +15,10 @@
         <div class="mb-3">
             <label for="stock" class="form-label">Stock</label>
             <input type="number" name="stock" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Product Image (jpg, png)</label>
+            <input type="file" name="image" class="form-control" accept="image/jpeg,image/png">
         </div>
         <button type="submit" class="btn btn-primary">Add Product</button>
         <a href="{{ route('shops.products.index', $shop) }}" class="btn btn-secondary">Back to Products</a>

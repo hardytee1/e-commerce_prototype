@@ -20,13 +20,24 @@
     <body class="font-sans antialiased">
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
             <div class="container">
-                <a class="navbar-brand" href="/">Marketplace</a>
+                <a class="navbar-brand" href="/dashboard">E-commerce UMKM</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('shops.index') }}">Shops</a></li>
+                        @auth
+                            @if(!auth()->user()->shop && auth()->user()->id !== 1)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('transactions.topup.form') }}">Top Up</a>
+                                </li>
+                            @endif
+                            @if(!auth()->user()->shop)
+                                <li class="nav-item"><a class="nav-link" href="{{ route('shops.index') }}">Shops</a></li>
+                            @endif
+                        @else
+                            <li class="nav-item"><a class="nav-link" href="{{ route('shops.index') }}">Shops</a></li>
+                        @endauth
                         <li class="nav-item"><a class="nav-link" href="{{ route('orders.index') }}">Orders</a></li>
                         @auth
                             @if(!auth()->user()->shop)
@@ -53,5 +64,7 @@
         <main>
             @yield('content')
         </main>
+            <!-- Bootstrap JS (add this before </body>) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
