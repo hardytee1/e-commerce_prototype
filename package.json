@@ -4,8 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite",
-        "heroku-postbuild": "npm run build"
+        "dev": "vite"
     },
     "engines": {
         "node": "20.x"
