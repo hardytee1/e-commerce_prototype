@@ -76,7 +76,7 @@ class CartController extends Controller
             }
             $itemTotal = $item->product->price * $item->quantity;
             $total += $itemTotal;
-            $platformFee += round($itemTotal * 0.05, 2); // 5% fee
+            $platformFee += round($itemTotal * 0.10, 2); // 10% fee
         }
 
         if ($user->wallet_balance < $total) {
@@ -110,7 +110,7 @@ class CartController extends Controller
                 ]);
                 // Credit shop wallet minus platform fee
                 $itemTotal = $product->price * $item->quantity;
-                $itemFee = round($itemTotal * 0.05, 2);
+                $itemFee = round($itemTotal * 0.10, 2);
                 $shop->wallet_balance += ($itemTotal - $itemFee);
                 $shop->save();
                 // Shop transaction

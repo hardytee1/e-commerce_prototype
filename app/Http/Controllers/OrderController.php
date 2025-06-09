@@ -76,22 +76,22 @@ class OrderController extends Controller
         }
         // Calculate total for this shop
         $shopTotal = $order->orderItems()->where('shop_id', $shopId)->sum(\DB::raw('quantity * price_per_unit'));
-        // Calculate platform fee (5%) and vendor payout (95%)
-        $platformFee = round($shopTotal * 0.05, 2);
+        // Calculate platform fee (10%) and vendor payout (90%)
+        $platformFee = round($shopTotal * 0.10, 2);
         $vendorPayout = $shopTotal - $platformFee;
-        // Credit shop wallet with 95%
+        // Credit shop wallet with 90%
         $shop->wallet_balance += $vendorPayout;
         $shop->save();
-        // Create transaction for shop (95%)
+        // Create transaction for shop (90%)
         \App\Models\Transaction::create([
             'user_id' => $shop->user_id,
             'shop_id' => $shop->id,
             'order_id' => $order->id,
             'type' => 'sale_credit',
             'amount' => $vendorPayout,
-            'description' => 'Penjualan order #' . $order->id . ' (95%)',
+            'description' => 'Penjualan order #' . $order->id . ' (90%)',
         ]);
-        // Credit admin wallet with 5%
+        // Credit admin wallet with 10%
         $admin = \App\Models\User::find(1);
         if ($admin) {
             $admin->wallet_balance += $platformFee;
@@ -101,7 +101,7 @@ class OrderController extends Controller
                 'order_id' => $order->id,
                 'type' => 'sale_credit', // use allowed type
                 'amount' => $platformFee,
-                'description' => 'Platform fee from order #' . $order->id . ' (5%)',
+                'description' => 'Platform fee from order #' . $order->id . ' (10%)',
             ]);
         }
         // Mark as completed
